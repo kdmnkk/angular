@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 
 export interface formInterface {
   itemName: FormControl<string>,
+  isLocked: FormControl<boolean>,
 }
 
 @Component({
@@ -13,6 +14,7 @@ export interface formInterface {
 export class ValueAccessorExampleComponent implements OnInit {
   form = new FormGroup<formInterface>({
     itemName: new FormControl('', { nonNullable: true }),
+    isLocked: new FormControl(false, { nonNullable: true }),
   });
 
   constructor() {}
