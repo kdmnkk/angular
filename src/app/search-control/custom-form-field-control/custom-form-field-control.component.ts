@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { FocusMonitor } from '@angular/cdk/a11y';
+import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
-import { Observable } from 'rxjs';
+import { MatInput } from '@angular/material/input';
+import { Subject } from 'rxjs';
 
 export interface FormFieldValueInterface {
   query: string;
@@ -17,29 +19,82 @@ export interface FormFieldValueInterface {
     useExisting: CustomFormFieldControlComponent,
   }],
 })
-export class CustomFormFieldControlComponent implements MatFormFieldControl<FormFieldValueInterface> {
-  constructor() {}
+export class CustomFormFieldControlComponent implements OnInit, OnDestroy, MatFormFieldControl<FormFieldValueInterface> {
+  @ViewChild(MatInput, { read: ElementRef, static: true })
+  input!: ElementRef;
 
-  autofilled!: boolean;
-  controlType!: string;
-  userAriaDescribedBy!: string;
-  disabled!: boolean;
-  empty!: boolean;
-  errorState!: boolean;
-  focused!: boolean;
-  id!: string;
-  ngControl!: NgControl | null;
-  placeholder!: string;
+  @Input()
+  set value(value: FormFieldValueInterface) {
+    this._value = value;
+    this.stateChanges.next();
+  }
+  get value(): FormFieldValueInterface {
+    return this._value;
+  }
+  stateChanges = new Subject<void>();
+  private _value!: FormFieldValueInterface;
+
+  static nextId = 0;
+  @HostBinding() id = `custom-form-field-id-${CustomFormFieldControlComponent.nextId++}`;
+
+  @Input()
+  set placeholder(value: string) {
+    this._placeholder = value;
+    this.stateChanges.next();
+  }
+
+  get placeholder() {
+    return this._placeholder;
+  }
+  private _placeholder!: string;
+
+  focused = true;
+  ngControl: NgControl | null = null;
+
+  get empty(): boolean {
+    return !this.value.query && !this.value.scope;
+  }
+
+  @HostBinding('class.floated')
+  get shouldLabelFloat(): boolean {
+    return true;
+  }
+
+  @Input()
   required!: boolean;
-  shouldLabelFloat!: boolean;
-  stateChanges!: Observable<void>;
-  value!: FormFieldValueInterface | null;
 
+  @Input()
+  disabled!: boolean;
 
-  onContainerClick(event: MouseEvent): void {
+  controlType = 'custom-form-field';
+
+  userAriaDescribedBy!: string;
+
+  errorState: boolean = false;
+
+  @HostBinding('attr.aria-describedby') describedBy = '';
+
+  constructor(private focusMonitor: FocusMonitor) {
+  }
+
+  onContainerClick(): void {
+    this.focusMonitor.focusVia(this.input, 'program');
   }
 
   setDescribedByIds(ids: string[]): void {
+    this.describedBy = ids.join(' ');
+  }
+
+  ngOnInit() {
+    this.focusMonitor.monitor(this.input).subscribe((focused) => {
+      this.focused = !!focused;
+      this.stateChanges.next();
+    });
+  }
+
+  ngOnDestroy() {
+    this.focusMonitor.stopMonitoring(this.input);
+    this.stateChanges.complete();
   }
 
 }
