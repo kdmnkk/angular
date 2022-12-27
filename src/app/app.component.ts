@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, HostBinding, Inject, OnInit, Renderer2 } from '@angular/core';
+import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
@@ -9,13 +9,10 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 })
 export class AppComponent implements OnInit {
   title = 'angular-control-value-accessor';
+  isDarkMode = localStorage.getItem('activeTheme') === 'theme-dark' || false;
 
-  private isDarkMode = false;
-  private currentTheme!: string;
-
-  @HostBinding('class')
-  get themeMode() {
-    return this.isDarkMode ? 'theme-dark' : 'theme-light'
+  get currentTheme() {
+    return this.isDarkMode ? 'theme-dark' : 'theme-light';
   }
 
   constructor(
@@ -24,13 +21,11 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currentTheme = localStorage.getItem('activeTheme') || 'theme-light';
     this.renderer.setAttribute(this.document.body, 'class', this.currentTheme);
   }
 
   onDarkModeSwitched({ checked } : MatSlideToggleChange) {
     this.isDarkMode = checked;
-    this.currentTheme = this.isDarkMode ? 'theme-dark' : 'theme-light';
     this.renderer.setAttribute(this.document.body, 'class', this.currentTheme);
     localStorage.setItem('activeTheme', this.currentTheme);
   }
