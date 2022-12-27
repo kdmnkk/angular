@@ -2,9 +2,7 @@
   <mat-label>Search</mat-label>
   <mat-icon matPrefix>search</mat-icon>
   <app-custom-form-field-control
-    [required]="true"
-    [disabled]="false"
+    [formControl]="formControl"
     [placeholder]="'Start to type'"
-    [value]="{query: '', scope: ''}"
   ></app-custom-form-field-control>
 </mat-form-field>

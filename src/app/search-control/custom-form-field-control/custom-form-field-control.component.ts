@@ -1,9 +1,10 @@
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NgControl } from '@angular/forms';
+import { Component, ElementRef, HostBinding, Input, OnDestroy, OnInit, Optional, Self, ViewChild } from '@angular/core';
+import { ControlValueAccessor, FormBuilder, FormControl, FormGroup, NgControl } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 
 export interface FormFieldValueInterface {
   query: string;
@@ -19,20 +20,22 @@ export interface FormFieldValueInterface {
     useExisting: CustomFormFieldControlComponent,
   }],
 })
-export class CustomFormFieldControlComponent implements OnInit, OnDestroy, MatFormFieldControl<FormFieldValueInterface> {
+export class CustomFormFieldControlComponent
+  implements OnInit, OnDestroy, MatFormFieldControl<FormFieldValueInterface>, ControlValueAccessor {
   @ViewChild(MatInput, { read: ElementRef, static: true })
   input!: ElementRef;
 
   @Input()
   set value(value: FormFieldValueInterface) {
-    this._value = value;
+    this.form.patchValue(value);
     this.stateChanges.next();
   }
+
   get value(): FormFieldValueInterface {
-    return this._value;
+    return this.form.value;
   }
+
   stateChanges = new Subject<void>();
-  private _value!: FormFieldValueInterface;
 
   static nextId = 0;
   @HostBinding() id = `custom-form-field-id-${CustomFormFieldControlComponent.nextId++}`;
@@ -46,10 +49,10 @@ export class CustomFormFieldControlComponent implements OnInit, OnDestroy, MatFo
   get placeholder() {
     return this._placeholder;
   }
+
   private _placeholder!: string;
 
   focused = true;
-  ngControl: NgControl | null = null;
 
   get empty(): boolean {
     return !this.value.query && !this.value.scope;
@@ -70,11 +73,47 @@ export class CustomFormFieldControlComponent implements OnInit, OnDestroy, MatFo
 
   userAriaDescribedBy!: string;
 
-  errorState: boolean = false;
+  get errorState() {
+    return this._defaultErrorStateMatcher.isErrorState(this.ngControl.control as FormControl, null);
+  }
 
   @HostBinding('attr.aria-describedby') describedBy = '';
 
-  constructor(private focusMonitor: FocusMonitor) {
+  onChange!: (value: FormFieldValueInterface) => void;
+
+  onTouch!: () => void;
+
+  form!: FormGroup;
+
+  constructor(
+    private focusMonitor: FocusMonitor,
+    @Optional() @Self() public ngControl: NgControl,
+    private fb: FormBuilder,
+    public _defaultErrorStateMatcher: ErrorStateMatcher
+  ) {
+    if (this.ngControl != null) {
+      this.ngControl.valueAccessor = this;
+    }
+    this.form = this.fb.group({
+      scope: new FormControl<string>(''),
+      query: new FormControl<string>(''),
+    });
+  }
+
+  writeValue(obj: FormFieldValueInterface): void {
+    this.value = obj;
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouch = fn;
+  }
+
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
   }
 
   onContainerClick(): void {
@@ -90,6 +129,13 @@ export class CustomFormFieldControlComponent implements OnInit, OnDestroy, MatFo
       this.focused = !!focused;
       this.stateChanges.next();
     });
+    this.focusMonitor
+      .monitor(this.input)
+      .pipe(take(1))
+      .subscribe(() => {
+        this.onTouch();
+      });
+    this.form.valueChanges.subscribe((value) => this.onChange(value));
   }
 
   ngOnDestroy() {
