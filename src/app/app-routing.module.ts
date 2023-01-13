@@ -4,7 +4,7 @@ import {
   ValueAccessorExampleComponent
 } from 'src/app/complex-form-control/value-accessor-example/value-accessor-example.component';
 import { DragAndDropComponent } from 'src/app/drag-and-drop/drag-and-drop/drag-and-drop.component';
-import { WidgetWrapperComponent } from 'src/app/patterns-example/widget-wrapper/widget-wrapper.component';
+import { BridgePatternComponent } from 'src/app/patterns-example/bridge-pattern/bridge-pattern.component';
 import {
   SearchFormFieldContainerComponent
 } from 'src/app/search-control/search-form-field-container/search-form-field-container.component';
@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: 'bridge-pattern',
-    component: WidgetWrapperComponent
+    component: BridgePatternComponent
   },
   {
     path: 'value-accessor',

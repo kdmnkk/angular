@@ -11,7 +11,6 @@ import { MenuItemInterface, menuItems } from 'src/app/constans';
 export class AppComponent implements OnInit {
   title = 'angular-control-value-accessor';
   isDarkMode = localStorage.getItem('activeTheme') === 'theme-dark' || false;
-  activeLinkIndex = -1;
   navLinks: MenuItemInterface[] = menuItems;
 
   get currentTheme() {
@@ -33,10 +32,6 @@ export class AppComponent implements OnInit {
     this.isDarkMode = checked;
     this.renderer.setAttribute(this.document.body, 'class', this.currentTheme);
     localStorage.setItem('activeTheme', this.currentTheme);
-  }
-
-  test() {
-    console.log(this);
   }
 }
 

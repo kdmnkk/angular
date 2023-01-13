@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { WidgetWrapperComponent } from './widget-wrapper/widget-wrapper.component';
 import { VelocityWidgetComponent } from './widgets/velocity-widget/velocity-widget.component';
 import { WeatherWidgetComponent } from './widgets/weather-widget/weather-widget.component';
+import { BridgePatternComponent } from './bridge-pattern/bridge-pattern.component';
 
 
 
@@ -16,6 +17,7 @@ import { WeatherWidgetComponent } from './widgets/weather-widget/weather-widget.
     WidgetWrapperComponent,
     VelocityWidgetComponent,
     WeatherWidgetComponent,
+    BridgePatternComponent,
   ],
   imports: [
     CommonModule,
