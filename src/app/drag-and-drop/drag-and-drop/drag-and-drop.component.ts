@@ -1,6 +1,6 @@
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
-import { Rectangle } from 'src/app/drag-and-drop/rectangles/rectangles.component';
+import { RectangleInterface } from 'src/app/drag-and-drop/rectangle.interface';
 
 @Component({
   selector: 'app-drag-and-drop',
@@ -8,14 +8,14 @@ import { Rectangle } from 'src/app/drag-and-drop/rectangles/rectangles.component
   styleUrls: ['./drag-and-drop.component.scss']
 })
 export class DragAndDropComponent implements OnInit {
-  rectangles: Rectangle[] = [];
+  rectangles: RectangleInterface[] = [];
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  drop(event: CdkDragDrop<Rectangle[]>) {
+  drop(event: CdkDragDrop<RectangleInterface[]>) {
     transferArrayItem(
       event.previousContainer.data,
       event.container.data,

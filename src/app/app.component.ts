@@ -9,7 +9,7 @@ import { MenuItemInterface, menuItems } from 'src/app/constans';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'angular-control-value-accessor';
+  title = 'ANGULAR';
   isDarkMode = localStorage.getItem('activeTheme') === 'theme-dark' || false;
   navLinks: MenuItemInterface[] = menuItems;
 

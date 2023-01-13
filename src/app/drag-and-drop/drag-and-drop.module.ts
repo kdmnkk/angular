@@ -4,8 +4,6 @@ import { CommonModule } from '@angular/common';
 import { DragAndDropComponent } from './drag-and-drop/drag-and-drop.component';
 import { RectanglesComponent } from './rectangles/rectangles.component';
 
-
-
 @NgModule({
   declarations: [
     DragAndDropComponent,
