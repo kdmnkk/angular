@@ -1,6 +1,5 @@
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { DragAndDropComponent } from './drag-and-drop/drag-and-drop.component';
 import { RectanglesComponent } from './rectangles/rectangles.component';
 
@@ -9,12 +8,8 @@ import { RectanglesComponent } from './rectangles/rectangles.component';
     DragAndDropComponent,
     RectanglesComponent,
   ],
-  exports: [
-    DragAndDropComponent,
-  ],
   imports: [
-    CommonModule,
-    DragDropModule,
+    SharedModule
   ],
 })
 export class DragAndDropModule { }
