@@ -1,3 +1,5 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -5,6 +7,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { ComplexFormControlModule } from 'src/app/complex-form-control/complex-form-control.module';
+import { DragAndDropModule } from 'src/app/drag-and-drop/drag-and-drop.module';
 import { PatternsExampleModule } from 'src/app/patterns-example/patterns-example.module';
 import { SearchControlModule } from 'src/app/search-control/search-control.module';
 
@@ -25,6 +28,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatToolbarModule,
     MatSlideToggleModule,
     MatSidenavModule,
+    DragAndDropModule,
+    DragDropModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

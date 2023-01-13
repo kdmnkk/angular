@@ -1,0 +1,20 @@
+<ul
+  cdkDropList
+  [cdkDropListData]="rectangles"
+  *ngIf="rectangles$ | async as rectangles"
+  (cdkDropListDropped)="drop($event)"
+>
+  <li *ngFor="let rectangle of rectangles" class="rectangle" cdkDrag>
+    <a
+      class="link"
+    >
+      <img [src]="rectangle.thumbnailUrl" alt="" width="60" />
+    </a>
+  </li>
+</ul>
+
+
+<!--<ng-container *ngIf="rectangles$ | async as rectangles">-->
+<!--  <h3 class="mat-title">{{ rectangles.title }}</h3>-->
+<!--  <img [src]="rectangles.url" alt="" />-->
+<!--</ng-container>-->
