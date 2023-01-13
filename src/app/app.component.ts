@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MenuItemInterface, menuItems } from 'src/app/constans';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,8 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 export class AppComponent implements OnInit {
   title = 'angular-control-value-accessor';
   isDarkMode = localStorage.getItem('activeTheme') === 'theme-dark' || false;
+  activeLinkIndex = -1;
+  navLinks: MenuItemInterface[] = menuItems;
 
   get currentTheme() {
     return this.isDarkMode ? 'theme-dark' : 'theme-light';
@@ -18,7 +21,9 @@ export class AppComponent implements OnInit {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2
-  ) {}
+  ) {
+    this.navLinks = menuItems;
+  }
 
   ngOnInit(): void {
     this.renderer.setAttribute(this.document.body, 'class', this.currentTheme);
@@ -28,6 +33,10 @@ export class AppComponent implements OnInit {
     this.isDarkMode = checked;
     this.renderer.setAttribute(this.document.body, 'class', this.currentTheme);
     localStorage.setItem('activeTheme', this.currentTheme);
+  }
+
+  test() {
+    console.log(this);
   }
 }
 
