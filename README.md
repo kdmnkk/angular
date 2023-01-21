@@ -1,13 +1,13 @@
-# AngularControlValueAccessor
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.10.
+# Angular project
 
 In this project created:
 - drag & drop;
 - Custom material form field;
 - Component that use bridge pattern;
 - Control value accessor;
-Also added routing.
+Also added routing and theme swich.
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.10.
 
 
 ## Development server
